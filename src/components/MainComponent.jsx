@@ -3,29 +3,41 @@ import { fetchProducts } from "../utils/apiCall";
 import CategoryFilter from "./CategoryFilter";
 import PriceFilter from "./PriceFilter";
 import AvailabilityFilter from "./AvailabilityFilter";
+import BrandFilter from "./BrandFilter";
 import ProductList from "./ProductList";
+import Spinner from "./Spinner";
 
 const MainComponent = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
-  const [availability, setAvailability] = useState(false);
+  const [availability, setAvailability] = useState({
+    inStock: false,
+    outOfStock: false,
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadProducts = async () => {
+      setLoading(true);
       const products = await fetchProducts();
       setProducts(products);
       setFilteredProducts(products);
       setCategories([...new Set(products.map((p) => p.category))]);
+      setBrands([...new Set(products.map((p) => p.brand))]);
+      setLoading(false);
     };
 
     loadProducts();
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     let filtered = products;
 
     if (selectedCategory.length) {
@@ -34,22 +46,52 @@ const MainComponent = () => {
       );
     }
 
+    if (selectedBrand.length) {
+      filtered = filtered.filter((product) =>
+        selectedBrand.includes(product.brand)
+      );
+    }
+
     filtered = filtered.filter(
       (product) => product.price >= minPrice && product.price <= maxPrice
     );
 
-    if (availability) {
-      filtered = filtered.filter((product) => product.inStock); // Assuming products have an inStock field
+    if (availability.inStock) {
+      filtered = filtered.filter(
+        (product) => product.availability === "in stock"
+      );
+    }
+
+    if (availability.outOfStock) {
+      filtered = filtered.filter(
+        (product) => product.availability === "out of stock"
+      );
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedCategory, minPrice, maxPrice, availability]);
+    setLoading(false);
+  }, [
+    products,
+    selectedCategory,
+    selectedBrand,
+    minPrice,
+    maxPrice,
+    availability,
+  ]);
 
   const handleCategoryChange = (category) => {
     setSelectedCategory((prevSelected) =>
       prevSelected.includes(category)
         ? prevSelected.filter((c) => c !== category)
         : [...prevSelected, category]
+    );
+  };
+
+  const handleBrandChange = (brand) => {
+    setSelectedBrand((prevSelected) =>
+      prevSelected.includes(brand)
+        ? prevSelected.filter((b) => b !== brand)
+        : [...prevSelected, brand]
     );
   };
 
@@ -61,14 +103,19 @@ const MainComponent = () => {
     }
   };
 
-  const handleAvailabilityChange = (value) => {
-    setAvailability(value);
+  const handleAvailabilityChange = (type) => {
+    setAvailability((prevAvailability) => ({
+      ...prevAvailability,
+      [type]: !prevAvailability[type],
+    }));
   };
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-100">
-        <div className="container mx-auto p-4">
+    <div className="min-h-screen bg-gray-100">
+      <div className="container mx-auto p-4">
+        {loading ? (
+          <Spinner />
+        ) : (
           <div className="flex flex-wrap -mx-4">
             <aside className="w-full sm:w-1/4 px-4">
               <CategoryFilter
@@ -76,12 +123,16 @@ const MainComponent = () => {
                 selectedCategory={selectedCategory}
                 onCategoryChange={handleCategoryChange}
               />
+              <BrandFilter
+                brands={brands}
+                selectedBrand={selectedBrand}
+                onBrandChange={handleBrandChange}
+              />
               <PriceFilter
                 minPrice={minPrice}
                 maxPrice={maxPrice}
                 onPriceChange={handlePriceChange}
               />
-              {/* BrandFilter omitted as Fake Store API does not have a brand field */}
               <AvailabilityFilter
                 availability={availability}
                 onAvailabilityChange={handleAvailabilityChange}
@@ -91,9 +142,9 @@ const MainComponent = () => {
               <ProductList products={filteredProducts} />
             </main>
           </div>
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
