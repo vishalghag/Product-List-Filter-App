@@ -139,7 +139,13 @@ const MainComponent = () => {
               />
             </aside>
             <main className="w-full sm:w-3/4 px-4">
-              <ProductList products={filteredProducts} />
+              {filteredProducts.length > 0 ? (
+                <ProductList products={filteredProducts} />
+              ) : (
+                <div className="text-center text-gray-700 mt-4">
+                  No products match the selected filters.
+                </div>
+              )}
             </main>
           </div>
         )}
