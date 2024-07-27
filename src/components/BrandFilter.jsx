@@ -9,7 +9,7 @@ const BrandFilter = ({ brands, selectedBrand, onBrandChange }) => {
 
   return (
     <div className="mb-4">
-      <h3 className="text-xl font-semibold mb-2">Brands</h3>
+      <h3 className="text-xl font-semibold mb-2 font-poppins">Brands</h3>
       <div>
         {brandsToDisplay.map((brand) => (
           <div key={brand} className="flex items-center mb-2">
@@ -18,9 +18,9 @@ const BrandFilter = ({ brands, selectedBrand, onBrandChange }) => {
               id={brand}
               checked={selectedBrand.includes(brand)}
               onChange={() => onBrandChange(brand)}
-              className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+              className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out "
             />
-            <label htmlFor={brand} className="ml-2 text-gray-700">
+            <label htmlFor={brand} className="ml-2 text-gray-700 font-poppins">
               {brand}
             </label>
           </div>
