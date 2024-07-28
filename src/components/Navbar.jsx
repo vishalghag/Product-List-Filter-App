@@ -53,11 +53,11 @@ const Navbar = () => {
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="px-2 space-y-1">
-              <span className="block text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium">
+              <span className="block text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium cursor-pointer">
                 <FaUserCircle size={24} className="inline-block mr-2" />
                 Profile
               </span>
-              <span className="block text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium">
+              <span className="block text-gray-900 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium cursor-pointer">
                 <FaShoppingCart size={24} className="inline-block mr-2" />
                 Cart
               </span>
