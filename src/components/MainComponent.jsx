@@ -6,6 +6,7 @@ import AvailabilityFilter from "./AvailabilityFilter";
 import BrandFilter from "./BrandFilter";
 import ProductList from "./ProductList";
 import Spinner from "./Spinner";
+import Navbar from "./Navbar";
 
 const MainComponent = () => {
   const [products, setProducts] = useState([]);
@@ -111,46 +112,49 @@ const MainComponent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto p-4">
-        {loading ? (
-          <Spinner />
-        ) : (
-          <div className="flex flex-wrap -mx-4">
-            <aside className="w-full sm:w-1/4 px-4">
-              <CategoryFilter
-                categories={categories}
-                selectedCategory={selectedCategory}
-                onCategoryChange={handleCategoryChange}
-              />
-              <BrandFilter
-                brands={brands}
-                selectedBrand={selectedBrand}
-                onBrandChange={handleBrandChange}
-              />
-              <PriceFilter
-                minPrice={minPrice}
-                maxPrice={maxPrice}
-                onPriceChange={handlePriceChange}
-              />
-              <AvailabilityFilter
-                availability={availability}
-                onAvailabilityChange={handleAvailabilityChange}
-              />
-            </aside>
-            <main className="w-full sm:w-3/4 px-4">
-              {filteredProducts.length > 0 ? (
-                <ProductList products={filteredProducts} />
-              ) : (
-                <div className="text-center text-gray-700 mt-4">
-                  No products match the selected filters.
-                </div>
-              )}
-            </main>
-          </div>
-        )}
+    <>
+      <Navbar />
+      <div className="min-h-screen bg-gray-100">
+        <div className="container mx-auto p-4">
+          {loading ? (
+            <Spinner />
+          ) : (
+            <div className="flex flex-wrap -mx-4">
+              <aside className="w-full sm:w-1/4 px-4">
+                <CategoryFilter
+                  categories={categories}
+                  selectedCategory={selectedCategory}
+                  onCategoryChange={handleCategoryChange}
+                />
+                <BrandFilter
+                  brands={brands}
+                  selectedBrand={selectedBrand}
+                  onBrandChange={handleBrandChange}
+                />
+                <PriceFilter
+                  minPrice={minPrice}
+                  maxPrice={maxPrice}
+                  onPriceChange={handlePriceChange}
+                />
+                <AvailabilityFilter
+                  availability={availability}
+                  onAvailabilityChange={handleAvailabilityChange}
+                />
+              </aside>
+              <main className="w-full sm:w-3/4 px-4">
+                {filteredProducts.length > 0 ? (
+                  <ProductList products={filteredProducts} />
+                ) : (
+                  <div className="text-center text-gray-700 mt-4">
+                    No products match the selected filters.
+                  </div>
+                )}
+              </main>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
