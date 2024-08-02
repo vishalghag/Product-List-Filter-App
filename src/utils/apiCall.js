@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_URL2 = "https://66a4fac95dc27a3c190a5579.mockapi.io/products";
+
+const API_URL2 = process.env.REACT_APP_API_URL;
 
 export const fetchProducts = async () => {
   try {
